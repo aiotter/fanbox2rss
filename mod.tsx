@@ -25,11 +25,11 @@ export const RssFeed = async (
 ) => (
   <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-      <atom:link
+      {/* <atom:link
         href={`https://${creator.creatorId}.fanbox.cc/`}
         rel="self"
         type="application/rss+xml"
-      />
+      /> */}
       <title>{creator.user.name}</title>
       <link>{`https://${creator.creatorId}.fanbox.cc/`}</link>
       <description>{creator.description}</description>
