@@ -1,6 +1,7 @@
 /** @jsx JsxXml.JSXXML */
 
-import JsxXml from "https://esm.sh/jsx-xml";
+import JsxXml from "https://esm.sh/jsx-xml@0.2.3";
+import { formatRFC7231, parseISO } from "https://esm.sh/date-fns@2.28.0";
 
 declare global {
   namespace JSX {
@@ -8,6 +9,10 @@ declare global {
       [elemName: string]: unknown;
     }
   }
+}
+
+function validateDate(date: string): string {
+  return formatRFC7231(parseISO(date, {}));
 }
 
 export const RssFeed = (
@@ -18,7 +23,7 @@ export const RssFeed = (
       <title>{creator.user.name}</title>
       <link>{`https://${creator.creatorId}.fanbox.cc/`}</link>
       <description>{creator.description}</description>
-      <lastBuildDate>{posts[0].updatedDatetime}</lastBuildDate>
+      <lastBuildDate>{validateDate(posts[0].updatedDatetime)}</lastBuildDate>
       <image>
         <url>{creator.coverImageUrl}</url>
         <title>{creator.user.name}</title>
@@ -28,7 +33,7 @@ export const RssFeed = (
         <item>
           <title>{post.title}</title>
           <link>{`https://${creator.creatorId}.fanbox.cc/${post.id}/`}</link>
-          <pubDate>ページの投稿日</pubDate>
+          <pubDate>{validateDate(post.publishedDatetime)}</pubDate>
           {post.coverImageUrl
             ? (
               <enclosure
