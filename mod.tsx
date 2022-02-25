@@ -1,6 +1,14 @@
-/** @jsx Nano.h */
+/** @jsx JsxXml.JSXXML */
 
-import * as Nano from "https://deno.land/x/nano_jsx@v0.0.29/mod.ts";
+import JsxXml from "https://esm.sh/jsx-xml";
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      [elemName: string]: unknown;
+    }
+  }
+}
 
 export const RssFeed = (
   { creator, posts }: { creator: FanboxCreator; posts: FanboxPost[] },
@@ -8,24 +16,30 @@ export const RssFeed = (
   <rss version="2.0">
     <channel>
       <title>{creator.user.name}</title>
-      <link>{`https://${creator.user.userId}.fanbox.cc/`}</link>
+      <link>{`https://${creator.creatorId}.fanbox.cc/`}</link>
       <description>{creator.description}</description>
       <lastBuildDate>{posts[0].updatedDatetime}</lastBuildDate>
       <image>
         <url>{creator.coverImageUrl}</url>
         <title>{creator.user.name}</title>
-        <link>{`https://${creator.user.userId}.fanbox.cc/`}</link>
+        <link>{`https://${creator.creatorId}.fanbox.cc/`}</link>
       </image>
       {posts.map((post) => (
         <item>
           <title>{post.title}</title>
-          <link>{`https://${creator.user.userId}.fanbox.cc/${post.id}/`}</link>
+          <link>{`https://${creator.creatorId}.fanbox.cc/${post.id}/`}</link>
           <pubDate>ページの投稿日</pubDate>
-          <enclosure
-            url={post.coverImageUrl}
-            type={`image/{new URL(post.coverImageUrl).pathname.split(".").slice(-1)[0]}`}
-          />
-          <source>{`https://${creator.user.userId}.fanbox.cc/`}</source>
+          {post.coverImageUrl
+            ? (
+              <enclosure
+                url={post.coverImageUrl}
+                type={`image/${
+                  new URL(post.coverImageUrl).pathname.split(".").slice(-1)[0]
+                }`}
+              />
+            )
+            : undefined}
+          <source>{`https://${creator.creatorId}.fanbox.cc/`}</source>
         </item>
       ))}
     </channel>
@@ -33,7 +47,7 @@ export const RssFeed = (
 );
 
 interface FanboxPost {
-  coverImageUrl: string;
+  coverImageUrl: string | null;
   creatorId: string;
   feeRequired: number;
   hasAdultContent: boolean;

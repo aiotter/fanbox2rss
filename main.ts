@@ -3,9 +3,9 @@
 /// <reference lib="dom.asynciterable" />
 /// <reference lib="deno.ns" />
 
+import JsxXml from "https://esm.sh/jsx-xml";
 import { serve } from "https://deno.land/std@0.127.0/http/server.ts";
 import { requestCreator, requestPosts, RssFeed } from "./mod.tsx";
-import * as Nano from "https://deno.land/x/nano_jsx@v0.0.29/mod.ts";
 
 async function handler(request: Request): Promise<Response> {
   const requestUrl = new URL(request.url);
@@ -33,8 +33,7 @@ async function getFanboxFeed(username: string) {
       requestPosts(username),
     ],
   );
-  const body = '<?xml version="1.0" encoding="UTF-8"?>' +
-    Nano.renderSSR(() => Nano.h(RssFeed, { creator, posts }));
+  const body = JsxXml.render(RssFeed({ creator, posts }));
   return new Response(body, {
     status: 200,
     headers: { "Content-type": "text/xml; charset=utf-8" },
