@@ -15,11 +15,21 @@ function validateDate(date: string): string {
   return formatRFC7231(parseISO(date, {}));
 }
 
-export const RssFeed = (
+async function getDataSize(url: string): Promise<number> {
+  const request = await fetch(url, { method: "HEAD" });
+  return Number(request.headers.get("Content-Length"));
+}
+
+export const RssFeed = async (
   { creator, posts }: { creator: FanboxCreator; posts: FanboxPost[] },
 ) => (
-  <rss version="2.0">
+  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
+      <atom:link
+        href={`https://${creator.creatorId}.fanbox.cc/`}
+        rel="self"
+        type="application/rss+xml"
+      />
       <title>{creator.user.name}</title>
       <link>{`https://${creator.creatorId}.fanbox.cc/`}</link>
       <description>{creator.description}</description>
@@ -29,10 +39,11 @@ export const RssFeed = (
         <title>{creator.user.name}</title>
         <link>{`https://${creator.creatorId}.fanbox.cc/`}</link>
       </image>
-      {posts.map((post) => (
+      {await Promise.all(posts.map(async (post) => (
         <item>
           <title>{post.title}</title>
           <link>{`https://${creator.creatorId}.fanbox.cc/${post.id}/`}</link>
+          <guid>{`https://${creator.creatorId}.fanbox.cc/${post.id}/`}</guid>
           <pubDate>{validateDate(post.publishedDatetime)}</pubDate>
           {post.coverImageUrl
             ? (
@@ -41,12 +52,15 @@ export const RssFeed = (
                 type={`image/${
                   new URL(post.coverImageUrl).pathname.split(".").slice(-1)[0]
                 }`}
+                length={await getDataSize(post.coverImageUrl)}
               />
             )
             : undefined}
-          <source>{`https://${creator.creatorId}.fanbox.cc/`}</source>
+          <source url={`https://${creator.creatorId}.fanbox.cc/`}>
+            {creator.user.name}
+          </source>
         </item>
-      ))}
+      )))}
     </channel>
   </rss>
 );

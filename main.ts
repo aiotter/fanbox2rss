@@ -33,7 +33,7 @@ async function getFanboxFeed(username: string) {
       requestPosts(username),
     ],
   );
-  const body = JsxXml.render(RssFeed({ creator, posts }));
+  const body = JsxXml.render(await RssFeed({ creator, posts }));
   return new Response(body, {
     status: 200,
     headers: { "Content-type": "text/xml; charset=utf-8" },
