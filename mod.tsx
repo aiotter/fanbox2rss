@@ -42,8 +42,8 @@ export const RssFeed = async (
       {await Promise.all(posts.map(async (post) => (
         <item>
           <title>{post.title}</title>
-          <link>{`https://${creator.creatorId}.fanbox.cc/${post.id}/`}</link>
-          <guid>{`https://${creator.creatorId}.fanbox.cc/${post.id}/`}</guid>
+          <link>{`https://${creator.creatorId}.fanbox.cc/posts/${post.id}`}</link>
+          <guid>{`https://${creator.creatorId}.fanbox.cc/posts/${post.id}`}</guid>
           <pubDate>{validateDate(post.publishedDatetime)}</pubDate>
           {post.coverImageUrl
             ? (
