@@ -6,9 +6,9 @@ async function handler(request: Request): Promise<Response> {
   const requestUrl = new URL(request.url);
   const pathNames = requestUrl.pathname.split("/").slice(1);
 
-  // GET /{username}/posts
+  // GET /@{username}/posts
   if (request.method === "GET" && pathNames[1] === "posts") {
-    return await getFanboxFeed(pathNames[0]);
+    return await getFanboxFeed(pathNames[0].replace(/^@/, ""));
   }
 
   if (["GET", "HEAD"].includes(request.method)) {
