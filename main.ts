@@ -1,9 +1,4 @@
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="dom.asynciterable" />
-/// <reference lib="deno.ns" />
-
-import JsxXml from "https://esm.sh/jsx-xml";
+import * as xml from "https://deno.land/x/jsx4xml@v0.1.2/mod.ts";
 import { serve } from "https://deno.land/std@0.127.0/http/server.ts";
 import { requestCreator, requestPosts, RssFeed } from "./mod.tsx";
 
@@ -33,7 +28,7 @@ async function getFanboxFeed(username: string) {
       requestPosts(username),
     ],
   );
-  const body = JsxXml.render(await RssFeed({ creator, posts }));
+  const body = xml.renderWithDeclaration(await RssFeed({ creator, posts }));
   return new Response(body, {
     status: 200,
     headers: { "Content-type": "text/xml; charset=utf-8" },

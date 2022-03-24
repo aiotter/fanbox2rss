@@ -1,15 +1,7 @@
-/** @jsx JsxXml.JSXXML */
+/** @jsx xml.createElement */
 
-import JsxXml from "https://esm.sh/jsx-xml@0.2.3";
+import * as xml from "https://deno.land/x/jsx4xml@v0.1.2/mod.ts";
 import { formatRFC7231, parseISO } from "https://esm.sh/date-fns@2.28.0";
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [elemName: string]: unknown;
-    }
-  }
-}
 
 function validateDate(date: string): string {
   return formatRFC7231(parseISO(date, {}));
@@ -24,6 +16,7 @@ export const RssFeed = async (
   { creator, posts }: { creator: FanboxCreator; posts: FanboxPost[] },
 ) => (
   <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  { /* <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"> */ }
     <channel>
       {/* <atom:link
         href={`https://${creator.creatorId}.fanbox.cc/`}
@@ -52,7 +45,7 @@ export const RssFeed = async (
                 type={`image/${
                   new URL(post.coverImageUrl).pathname.split(".").slice(-1)[0]
                 }`}
-                length={await getDataSize(post.coverImageUrl)}
+                length={String(await getDataSize(post.coverImageUrl))}
               />
             )
             : undefined}
