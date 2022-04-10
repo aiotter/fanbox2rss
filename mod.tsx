@@ -1,6 +1,6 @@
 /** @jsx xml.createElement */
 
-import * as xml from "https://deno.land/x/jsx4xml@v0.1.2/mod.ts";
+import * as xml from "https://deno.land/x/jsx4xml@v0.1.4/mod.ts";
 import { formatRFC7231, parseISO } from "https://esm.sh/date-fns@2.28.0";
 
 function validateDate(date: string): string {

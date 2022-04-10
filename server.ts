@@ -1,4 +1,4 @@
-import * as xml from "https://deno.land/x/jsx4xml@v0.1.2/mod.ts";
+import * as xml from "https://deno.land/x/jsx4xml@v0.1.4/mod.ts";
 import { serve } from "https://deno.land/std@0.127.0/http/server.ts";
 import { requestCreator, requestPosts, RssFeed } from "./mod.tsx";
 
